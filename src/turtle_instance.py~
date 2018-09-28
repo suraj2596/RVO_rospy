@@ -1,0 +1,118 @@
+#!/usr/bin/env python
+#!/usr/bin/env python
+
+import rospy
+from geometry_msgs.msg import Twist
+from turtlesim.msg import Pose
+from math import pow, atan2, sqrt
+
+from std_msgs.msg import String
+from rvo.msg import information
+
+from random import randint
+import time 
+
+class TurtleBot:
+
+    def __init__(self, turtle_name):
+		
+		# Creates a node with name of the turtle
+        rospy.init_node("turtlesim_node")
+        
+		### Publisher ###        
+        
+		# Publisher which will publish to the topic '/turtleX/cmd_vel'.        
+        self.velocity_publisher = rospy.Publisher('/'+turtle_name+'/cmd_vel', Twist, queue_size=10)
+        
+        # Publisher which will publish to the topic '/common_information'
+        self.publish_information = rospy.Publisher("common_information", information, queue_size=10)
+
+        ### Subscriber ### 
+
+        # self.update_pose is called when a message of type Pose is received.
+        self.pose_subscriber = rospy.Subscriber('/'+turtle_name+'/pose', Pose, self.update_pose)
+        
+        # self.recieve_from_information_channel is called when a message of type information is received.        
+        rospy.Subscriber("common_information", information, self.r)
+        
+        self.pose = Pose()
+        self.inf = information()        
+        
+        self.rate = rospy.Rate(1)
+        
+
+    def update_pose(self, data):
+        """Callback function which is called when a new message of type Pose is
+        received by the subscriber."""
+        self.pose = data
+        self.pose.x = round(self.pose.x, 4)
+        self.pose.y = round(self.pose.y, 4)
+        
+
+    def euclidean_distance(self, goal_pose):
+        """Euclidean distance between current pose and the goal."""
+        return sqrt(pow((goal_pose.x - self.pose.x), 2) +
+                    pow((goal_pose.y - self.pose.y), 2))
+
+    def linear_vel(self, goal_pose, constant=1.5):
+        """See video: https://www.youtube.com/watch?v=Qh15Nol5htM."""
+        return constant * self.euclidean_distance(goal_pose)
+
+    def steering_angle(self, goal_pose):
+        """See video: https://www.youtube.com/watch?v=Qh15Nol5htM."""
+        return atan2(goal_pose.y - self.pose.y, goal_pose.x - self.pose.x)
+
+    def angular_vel(self, goal_pose, constant=6):
+        """See video: https://www.youtube.com/watch?v=Qh15Nol5htM."""
+        return constant * (self.steering_angle(goal_pose) - self.pose.theta)
+        
+    def wander(self):
+        """Moves the turtle to the goal."""
+        goal_pose = Pose()
+
+        # Please, insert a number slightly greater than 0 (e.g. 0.01).
+        distance_tolerance = 1
+		
+        while 1:
+            goal_pose.x = int(randint(0, 9))
+            goal_pose.y = int(randint(0, 9))
+	        
+            vel_msg = Twist()
+
+            # Linear velocity in the x-axis.
+            vel_msg.linear.x = self.linear_vel(goal_pose)
+            vel_msg.linear.y = 0
+            vel_msg.linear.z = 0
+
+            # Angular velocity in the z-axis.
+            vel_msg.angular.x = 0
+            vel_msg.angular.y = 0
+            vel_msg.angular.z = 3
+
+            # Publishing our vel_msg
+            self.velocity_publisher.publish(vel_msg)
+
+            # Publish at the desired rate.
+            self.rate.sleep()
+            
+    def r(self,data):
+        self.inf = data
+        print("Recieved data is : " + self.inf)
+        
+    def publish_to_information_channel(self,turtle_name):
+        i = information()
+        i.node_name = "hi"
+        i.node_velocity.linear.x = 1
+        i.node_velocity.linear.y = 1
+        i.node_velocity.linear.z = 1
+        i.node_velocity.angular.x = 1
+        i.node_velocity.angular.y = 1
+        i.node_velocity.angular.z = 1
+		
+        self.publish_information.publish(i)
+        print("Published the turtle node name on topic /common_information")
+        self.rate.sleep()
+    	
+            
+    #def transmit(self):
+    	
