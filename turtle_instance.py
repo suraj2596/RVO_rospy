@@ -133,16 +133,50 @@ class TurtleBot:
     def in_RVO(self,h):
         #print(len(self.VO))
         for i in self.RVO:
-            print(h)
-            print(self.RVO[i])
+            #print(h)
+            #print(self.RVO[i])
             if(self.RVO[i][0] < h < self.RVO[i][1]):
                 return True
                 #break
             else:
                 return False
 
+    def inside(self,s,h):
+        #print(len(self.VO))
+        #print(h)
+        self.best_min_temp = None
+        self.desired_heading = atan2(self.goal_pose.y - self.pose.y, self.goal_pose.x - self.pose.x)
+
+        while(len(h)!=0):
+            self.idx = np.abs(np.asarray(h)- 0.3 - self.desired_heading).argmin()
+            print(self.idx)
+            for j in s:
+                #print(j)
+                print(s[j])
+                if(s[j][0] < h[self.idx] < s[j][1]):
+                    print("The value of h is %f." %h[self.idx])
+                    h = np.delete(h,self.idx)
+                    self.inside(s,h)
+                else:
+                    continue
+            self.best_min_temp = h[self.idx]
+            break
+
+        """for i in range(len(h)):
+            for j in s:
+                #print(j)
+                if(s[j][0] < h[i] < s[j][1]):
+                    print(s[j])
+                    print("The value of h is %f." %h[i])
+                    break
+                else:
+                    continue
+            self.best_min_temp = h[i]
+            break"""
+        return self.best_min_temp
+
     # Returns True when called if the agent is on collision course
-    def collision(self,v_mag,turtle_name=0,r=2):
+    def collision(self,v_mag,turtle_name=0,r=3):
         #calc the relative velocity of the agent and choosen other agent
         self._rel_heading = {}
         self.point_to_agent_heading = {}
@@ -171,7 +205,7 @@ class TurtleBot:
                 except ValueError:
                     self._omega[i] = np.pi/2
 
-                self.VO[i] = sorted([self.point_to_agent_heading[i] - self._omega[i],self.point_to_agent_heading[i] + self._omega[i]])
+                self.VO[i] = ([self.point_to_agent_heading[i] - self._omega[i],self.point_to_agent_heading[i] + self._omega[i]])
                 self.RVO[i] = np.add(np.asarray(self.VO[i]),self.all_agents_pose_dict[self.agent_name][2])/2
                 #self.VO.append(sorted([self.point_to_agent_heading[i] - self._omega[i],self.point_to_agent_heading[i] + self._omega[i]]))
                 #self.VO.append([1,1])
@@ -196,12 +230,31 @@ class TurtleBot:
 
     def choose_new_velocity_RVO(self):
         #Find the nearest heading that is outside the VO
+        #self.best_min = self.RVO[0][0]
+        self.temp_array_marginals = []
         for i in self.RVO:
-            print(self.RVO[i])
-            return self.RVO[i][0]
-                #break
+            #print(self.RVO[i])
+            #find which marginal velocity is near to the desired velocity in all lists of rvo
+            self.desired_heading = atan2(self.goal_pose.y - self.pose.y, self.goal_pose.x - self.pose.x)
+            """if(abs(self.desired_heading - self.RVO[i][0]) < self.best_min):
+                self.best_min = self.RVO[i][0]
+            if(abs(self.desired_heading - self.RVO[i][1]) < self.best_min):
+                self.best_min = self.RVO[i][0]"""
+            self.temp_array_marginals = np.append(self.temp_array_marginals, self.RVO[i])
+            self.temp_temp_temp = self.RVO[i][0]
 
-        # if not available, use a penalized velocity with same heading
+        #print(self.temp_array_marginals)
+        #self.temp_array_marginals_sorted = sorted((np.abs(np.asarray(self.temp_array_marginals) - self.desired_heading)))
+        #then check if the chosen marginal velocity is inside other VOs or RVOs
+        self.best_min = self.inside(self.RVO,self.temp_array_marginals)
+        #print(self.best_min)
+        # if not available, self.inside will return None.
+        print(self.heading)
+        #return self.best_min
+        #return self.RVO[0]
+        #return self.temp_array_marginals_sorted[0]
+        return self.temp_temp_temp
+        # Then,use a penalized velocity with same heading
         #for i in
         #return 2
 
@@ -268,15 +321,15 @@ class TurtleBot:
         distance_tolerance = 0.2
 
         # Setting the velocity
-        #self.vel_msg = Twist()
-        #self.vel_msg.linear.x = 3
-        #self.set_goal_heading(x,y)
+        self.vel_msg = Twist()
+        self.vel_msg.linear.x = 3
+        self.set_goal_heading(x,y)
         #self.velocity_publisher.publish(self.vel_msg)
 
-        #rospy.sleep(10)
+        #rospy.sleep(0.5)
         while self.euclidean_distance(self.goal_pose) >= distance_tolerance:
-            self.vel_msg = Twist()
-            self.vel_msg.linear.x = 3
+            #self.vel_msg = Twist()
+            #self.vel_msg.linear.x = 3
             #self.velocity_publisher.publish(self.vel_msg)
             #rospy.sleep(0.5)
             if(self.collision(self.vel_msg.linear.x) == True):
@@ -286,10 +339,16 @@ class TurtleBot:
                 print("The new choosen velocity is : ")
                 #self.heading = self.choose_new_velocity_VO()
                 self.heading = self.choose_new_velocity_RVO()
+                if (self.best_min == None):
+                    #self.vel_msg.linear.x = self.penalize(self.vel_msg.linear.x)
+                    #self.heading =
+                    self.vel_msg.linear.x = 1
+                else:
+                    self.vel_msg.linear.x = 3
                 #print(self.heading)
+                print("---")
                 #self.heading = self.VO[]
                 self.set_heading(self.heading)
-                self.vel_msg.linear.x = 3
             else:
                 self.set_goal_heading(x,y)
 
