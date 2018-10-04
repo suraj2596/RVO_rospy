@@ -35,14 +35,16 @@ sp_x,sp_y,goal_x,goal_y = [None] * (user_input),[None] * (user_input),[None] * (
 r = 5
 c = [5.5,5.5]
 _angle = 2*(np.pi/user_input)
+_pad_angle_sp = 0
+_pad_angle_goal = 0
 
 for i in range(user_input):
     agent_names[i] = "turtle" + str(i+1)
     agent_obj[i] = "x" + str(i+1)
-    sp_x[i] = c[0] + r*np.cos(_angle*i + np.pi/4)
-    sp_y[i] = c[1] + r*np.sin(_angle*i + np.pi/4)
-    goal_x[i] = c[0] - r*np.cos(_angle*i + np.pi/4)
-    goal_y[i] = c[1] - r*np.sin(_angle*i + np.pi/4)
+    sp_x[i] = c[0] + r*np.cos(_angle*i + _pad_angle_sp)
+    sp_y[i] = c[1] + r*np.sin(_angle*i + _pad_angle_sp)
+    goal_x[i] = c[0] - r*np.cos(_angle*i + _pad_angle_goal)
+    goal_y[i] = c[1] - r*np.sin(_angle*i + _pad_angle_goal)
 
 #print(agent_names)
 
