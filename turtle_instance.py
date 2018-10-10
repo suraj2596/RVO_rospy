@@ -240,7 +240,7 @@ class TurtleBot:
 
     def choose_new_velocity_RVO(self):
         rr = 2
-        incr = 0.1
+        incr = 0.01
         self.desired_heading = atan2(self.goal_pose.y - self.pose.y, self.goal_pose.x - self.pose.x)
         self._headings_array = np.round(np.arange(-np.pi,np.pi,incr),rr)
 

@@ -1,3 +1,4 @@
+# (Still in progress. Please visit back)
 # RVO using rospy
 
 ## About:
@@ -6,8 +7,8 @@ This repo consists of implementation of the paper [RVO]() in ROS using the ROS p
 ## Index:
 1. Repo Contents
 2. About RVO
-3. Implementation results
-4. How to use
+3. Using this library on your system
+4. Implementation Results
 
 ---
 
@@ -59,6 +60,6 @@ This is what you will get*
 
  ---
 
- ## 4. Implementation Results:
+## 4. Implementation Results:
 
- These are the results obtained for various number of agents.
+These are the results obtained for various number of agents.
