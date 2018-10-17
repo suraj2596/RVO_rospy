@@ -22,12 +22,12 @@ def multi_agents(agent_name,agent_obj,sp_x,sp_y,goal_x,goal_y,p_name):
     try:
         agent_obj = TurtleBot(agent_name)
         agent_obj.start_point(sp_x,sp_y)
-        agent_obj.move2goal_rvo(goal_x,goal_y)
+        agent_obj.move2goal_vo(goal_x,goal_y)
 
     except rospy.ROSInterruptException:
         pass
 
-user_input = int(input("Type no. of agents : "))
+user_input = int(input("Type no. of agents : ")) +1
 agent_names, agent_obj,p_name = [None] * (user_input), [None] * (user_input), [None] * (user_input)
 sp_x,sp_y,goal_x,goal_y = [None] * (user_input),[None] * (user_input),[None] * (user_input),[None] * (user_input)
 
@@ -38,9 +38,10 @@ _angle = 2*(np.pi/user_input)
 _pad_angle_sp = 0
 _pad_angle_goal = 0
 
+#define turtle 0 outside loop
 for i in range(user_input):
-    agent_names[i] = "turtle" + str(i+1)
-    agent_obj[i] = "x" + str(i+1)
+    agent_names[i] = "turtle" + str(i)
+    agent_obj[i] = "x" + str(i)
     sp_x[i] = c[0] + r*np.cos(_angle*i + _pad_angle_sp)
     sp_y[i] = c[1] + r*np.sin(_angle*i + _pad_angle_sp)
     goal_x[i] = c[0] - r*np.cos(_angle*i + _pad_angle_goal)

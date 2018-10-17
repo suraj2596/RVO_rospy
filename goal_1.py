@@ -7,11 +7,11 @@ from math import pow, atan2, sqrt
 
 from turtle_instance import TurtleBot
 
-agent_name_1 = "turtle1"
+agent_name = "turtle1"
 
 if __name__ == '__main__':
     try:
-        x1 = TurtleBot(agent_name_1)
+        x1 = TurtleBot(agent_name)
         #x2 = TurtleBot(agent_name_2)
 
         """x1(agent_name_1)
