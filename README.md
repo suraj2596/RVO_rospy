@@ -6,8 +6,7 @@ This repo consists of implementation of the paper [RVO]() in ROS using the ROS p
 ## Index:
 1. Repo Contents
 2. About RVO
-3. Using this library on your system
-4. Implementation Results
+3. Implementation Results
 
 ---
 
