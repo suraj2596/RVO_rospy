@@ -1,4 +1,3 @@
-# (Still in progress. Please visit back)
 # RVO using rospy
 
 ## About:
@@ -24,42 +23,14 @@ This repo consists of implementation of the paper [RVO]() in ROS using the ROS p
 ---
 
 ## 2. About RVO:
-(medium link)
+
+[Paper Review: Reciprocal Velocity Obstacles for Real-Time Multi-Agent Navigation](https://medium.com/@suraj2596/paper-review-reciprocal-velocity-obstacles-for-real-time-multi-agent-navigation-aaf6adbedefd)
 
 ---
 
-## 3. Using this library on your system:
-#### 1. Pre-requisites:
-- ROS(developed in Lunar)
-- Turtlesim
-- Python 3
-
-#### 2. Installing this package on your system:
-
-#### 3. Startup ROS and Turtlesim simulator
-After installing the package, fire-up the ROS core
-```
-$ roscore
-```
-Then, start turtlesim sumulator in another terminal
-```
-$ rosrun turtlesim turtlesim_node
-```
-
-#### 4. Run
-Now in another terminal, run the python code `multi_process_agents.py`
-```
-$ ./multi_process_agents.py
-```
-You will now be prompted to type the number of agents. For example,
-```
-$ Type  # of agents: 3
-```
-This is what you will get*
-(gif goes here)
-
- ---
-
-## 4. Implementation Results:
+## 3. Implementation Results:
 
 These are the results obtained for various number of agents.
+2-agent: https://www.youtube.com/watch?v=wt4jghNB_5w
+4-agent: https://www.youtube.com/watch?v=gfRwZAqging
+12-agent: https://www.youtube.com/watch?v=ChxYs4OLPwg
