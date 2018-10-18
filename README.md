@@ -30,6 +30,6 @@ This repo consists of implementation of the paper [RVO]() in ROS using the ROS p
 ## 3. Implementation Results:
 
 These are the results obtained for various number of agents.
-2-agent: https://www.youtube.com/watch?v=wt4jghNB_5w
-4-agent: https://www.youtube.com/watch?v=gfRwZAqging
-12-agent: https://www.youtube.com/watch?v=ChxYs4OLPwg
+- 2-agent: https://www.youtube.com/watch?v=wt4jghNB_5w
+- 4-agent: https://www.youtube.com/watch?v=gfRwZAqging
+- 12-agent: https://www.youtube.com/watch?v=ChxYs4OLPwg
