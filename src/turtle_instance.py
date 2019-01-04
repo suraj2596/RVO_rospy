@@ -120,6 +120,7 @@ class TurtleBot:
         return False
 
     def in_RVO(self,h):
+        #use sets for optimized code using "if h in self.RVO"
         print(self.RVO)
         for i in self.RVO:
             if(self.RVO[i][0] < h < self.RVO[i][1]):
@@ -134,6 +135,7 @@ class TurtleBot:
         self.point_to_agent_heading = {}
         self._omega = {}
         self.VX = {}
+        self.VO = {}
         self.RVO = {}
         self.time_to_collision = {}
         rospy.sleep(0.01)
@@ -159,6 +161,7 @@ class TurtleBot:
 
                     # VO finder :: Should output a range of headings into an 2D array
                     self.point_to_agent_heading[i] = round(atan2((self.all_agents_pose_dict[i][1] - self.pose.y),(self.all_agents_pose_dict[i][0] - self.pose.x)),rr)
+                    #can also use np.clip
                     try:
                         self._omega[i] = round(asin(r/self._distance),rr)
                     except ValueError:
@@ -177,11 +180,18 @@ class TurtleBot:
                     if(c1 | c2 | c3 | c4):
                         self.time_to_collision[i] = abs(self.all_agents_pose_dict[i][0] - self.pose.x)/abs(v_mag * (cos(self.pose.theta) - cos(self.all_agents_pose_dict[i][2])))
 
-
+                    #Instead of checking if v_A is in VO, im checking if v_AB is inside something called "VX"
+                    #But for RVO, we are adding v_A and v_B to VX.
+                    # This is computationally easier
                     self.VX[i] = (np.asarray([self.point_to_agent_heading[i] - self._omega[i],self.point_to_agent_heading[i] + self._omega[i]]))
+                    #####find v_A by adding v_B to VX (both mag and dir)
+                    #self.VO[i] = self.VX[i] + self.all_agents_pose_dict[i][2]
                     self.num = v_mag * sin(self.present_temp_h) + self.all_agents_pose_dict[i][3] * sin(self.all_agents_pose_dict[i][2])
                     self.den = v_mag * cos(self.present_temp_h) + self.all_agents_pose_dict[i][3] * cos(self.all_agents_pose_dict[i][2])
+
                     self.RVO[i] = (self.VX[i] + atan2(self.num,self.den))/2
+                    #Uncomment the below line if you want the code to behave like VO
+                    #self.RVO[i] = self.VX[i]
 
                     if (self._distance < self._least_distance):
                         self._least_distance = self._distance
@@ -279,6 +289,7 @@ class TurtleBot:
         print(self.best_min)
         print("===")
         #rospy.sleep(1)
+        #####then return a velocity that is average of current velocity and a velocity outside VO nearer to current heading
         return self.best_min
 # end
 #-----------------------------------------------------------------------------------------#
