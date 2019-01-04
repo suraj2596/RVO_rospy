@@ -7,7 +7,7 @@ This repo consists of implementation of the paper [RVO]() in ROS using the ROS p
 ## Index:
 1. Repo Contents
 2. About RVO
-3. How to run
+3. Using this repo
 4. Implementation Results
 
 ---
@@ -28,7 +28,7 @@ This repo consists of implementation of the paper [RVO]() in ROS using the ROS p
 
 ---
 
-## 3. How to run
+## 3. Using this repo
 1. Clone this package into your catkin workspace
 
 `git clone https://github.com/suraj2596/RVO_rospy/`
