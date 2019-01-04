@@ -7,18 +7,18 @@ This repo consists of implementation of the paper [RVO]() in ROS using the ROS p
 ## Index:
 1. Repo Contents
 2. About RVO
-3. Implementation Results
+3. How to run
+4. Implementation Results
 
 ---
 
 ## 1. Repo Contents:
-- [`turtle_instance.py`]() consists of a class that describes the behaviour of each agent.
-- [multi_process_agents.py]() consists of the code that:
+- 'src/turtle_instance.py' consists of a attributes and methods that describe the behaviour of each agent.
+- 'src/multi_process_agents.py' consists of the code that:
   - generates the specified number of agents and
   - Each agent then creates an object from class defined in "turtle_instance.py"
   - Also, it assigns an individual process on CPU for each of the generated agent.
-- [Individual/]() consists of code where each python file is responsible for each agent. [This is a previous version before writing multi_process_agents.py]
-- [repo_support_files/]() support files for README.md file.
+- 'src/Individual/' consists of code where each python file is responsible for each agent. (This is a previous version before writing multi_process_agents.py)
 
 ---
 
@@ -28,7 +28,27 @@ This repo consists of implementation of the paper [RVO]() in ROS using the ROS p
 
 ---
 
-## 3. Implementation Results:
+## 3. How to run
+1. Clone this package into your catkin workspace
+'git clone https://github.com/suraj2596/RVO_rospy/'
+
+2. Do a catkin make
+
+3. Start ROS
+'roscore'
+
+4. In another terminal, start turtlesim
+'rosrun turtlesim turtlesim_node'
+
+5. In another terminal, run this command to spawn a turtle with name 'turtlex'
+'rosservice call /spawn "x: 0.0 y: 0.0 theta: 0.0 name: ''"'
+
+6. In another terminal, run multi_process_agents.py
+`python multi_process_agents.py`
+
+
+---
+## 4. Implementation Results:
 
 These are the results obtained for various number of agents.
 - 2-agent: https://www.youtube.com/watch?v=wt4jghNB_5w
