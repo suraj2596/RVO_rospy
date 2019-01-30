@@ -1,5 +1,5 @@
 # RVO using rospy
-![](https://github.com/suraj2596/RVO_rospy/blob/master/repo_support_files/2_agents.gif?raw=true)
+![](https://cdn-images-1.medium.com/max/600/1*-PEHaKXuBFPBC0HdQ-Kjjg.gif)
 
 ## About:
 This repo consists of implementation of the paper [RVO]() in ROS using the ROS python linrary "rospy". **Turtlesim** was used as the simulator for it's simplicity to test out the concept proposed in the paper.
